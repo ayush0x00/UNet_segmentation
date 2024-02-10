@@ -1,6 +1,9 @@
 import torch
 import torch.nn as nn
 import torchvision.transforms.functional as T
+from torchvision import transforms
+from PIL import Image
+
 
 
 class DoubleConv(nn.Module):
@@ -79,12 +82,22 @@ class UNET(nn.Module):
         return self.final_conv(x)
 
 def test():
-    x= torch.randn((3,1,572,572))
-    model = UNET(in_channels=1, out_channels=2)
-    preds = model(x)
+    # x= torch.randn((3,3,160,160))
+    t_img = Image.open("./test.jpg").convert('RGB')
+    transform = transforms.Compose([
+        transforms.Resize((160,160)),
+        transforms.ToTensor()
+    ])
+    
+    tran_img = transform(t_img)
+    print(tran_img.shape)
+    model = UNET(in_channels=3, out_channels=3)
+    preds = model(tran_img.unsqueeze(0))
 
-    print(preds.shape)
-    print(x.shape)
+    img_pil = T.to_pil_image(preds[0])
+    img_pil.show()
+
+    
 
 if __name__=='__main__':
     test()
