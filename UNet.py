@@ -76,28 +76,28 @@ class UNET(nn.Module):
             if(x.shape != skip.shape):
                 skip = T.center_crop(skip,x.shape[2:])
 
-            concat_skip = torch.concat((skip,x),dim=1)
+            concat_skip = torch.cat((skip,x),dim=1)
             x = self.up[idx+1](concat_skip)
 
         return self.final_conv(x)
 
-def test():
-    # x= torch.randn((3,3,160,160))
-    t_img = Image.open("./test.jpg").convert('RGB')
-    transform = transforms.Compose([
-        transforms.Resize((160,160)),
-        transforms.ToTensor()
-    ])
+# def test():
+#     # x= torch.randn((3,3,160,160))
+#     t_img = Image.open("./test.jpg").convert('RGB')
+#     transform = transforms.Compose([
+#         transforms.Resize((160,160)),
+#         transforms.ToTensor()
+#     ])
     
-    tran_img = transform(t_img)
-    print(tran_img.shape)
-    model = UNET(in_channels=3, out_channels=3)
-    preds = model(tran_img.unsqueeze(0))
+#     tran_img = transform(t_img)
+#     print(tran_img.shape)
+#     model = UNET(in_channels=3, out_channels=3)
+#     preds = model(tran_img.unsqueeze(0))
 
-    img_pil = T.to_pil_image(preds[0])
-    img_pil.show()
+#     img_pil = T.to_pil_image(preds[0])
+#     img_pil.show()
 
     
 
-if __name__=='__main__':
-    test()
+# if __name__=='__main__':
+#     test()
